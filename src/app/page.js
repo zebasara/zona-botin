@@ -200,7 +200,7 @@ export default function HomePage() {
             {[
               { icon: '🚀', title: 'Envío Rápido', desc: 'Despachamos en 24/48hs a todo el país con seguimiento en tiempo real.' },
               { icon: '💳', title: 'Pago Seguro', desc: 'Pagá con tarjeta, transferencia o efectivo a través de Mercado Pago.' },
-              { icon: '⭐', title: 'Calidad Garantizada', desc: '100% original y con garantía. Si no estás conforme, te devolvemos el dinero.' },
+              { icon: '⭐', title: 'Calidad Garantizada', desc: '100% calidad Premium y con garantía. Si no estás conforme, te devolvemos el dinero.' },
             ].map(item => (
               <div key={item.title} className="bg-verde-800/50 backdrop-blur rounded-3xl p-8 border border-verde-600 hover:border-verde-400 transition-colors">
                 <span className="text-5xl block mb-4">{item.icon}</span>
