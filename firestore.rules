@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Products - todos pueden leer, solo admin puede escribir
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.email == 'admin@zonabotin.com';
+    }
+
+    // Orders - usuarios autenticados pueden crear, admin puede leer/editar todo, user puede leer los suyos
+    match /orders/{orderId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null
+        && (resource.data.buyerUid == request.auth.uid
+            || request.auth.token.email == 'admin@zonabotin.com');
+      allow update: if request.auth != null
+        && request.auth.token.email == 'admin@zonabotin.com';
+    }
+
+    // Users - usuarios pueden leer/editar su propio perfil, admin puede leer todos
+    match /users/{userId} {
+      allow read, write: if request.auth != null
+        && (request.auth.uid == userId
+            || request.auth.token.email == 'admin@zonabotin.com');
+    }
+  }
+}

@@ -1,0 +1,228 @@
+# ⚽ Zona Botín
+
+Tienda online de botines de fútbol. Desarrollada con Next.js 14, Firebase y MercadoPago.
+
+---
+
+## 🌐 URLs del Proyecto
+
+| Entorno | URL |
+|---|---|
+| Local | http://localhost:3000 |
+| Producción | _(agregar URL de Vercel cuando esté deployado)_ |
+| Panel Admin | /admin |
+
+---
+
+## 🛠️ Servicios Utilizados
+
+### Firebase (Google)
+> https://console.firebase.google.com → Proyecto: **zona-botín**
+
+| Servicio | Uso |
+|---|---|
+| Authentication | Login y registro de usuarios con email/contraseña |
+| Firestore Database | Almacena productos, pedidos y usuarios |
+| Storage | No habilitado — se usa Cloudinary en su lugar |
+
+**Colecciones de Firestore:**
+- `products` — catálogo de productos
+- `orders` — pedidos realizados por los usuarios
+- `users` — datos de perfil y envío de los clientes
+
+---
+
+### Cloudinary
+> https://cloudinary.com → Cloud: **dryv3qbrh**
+
+| Servicio | Uso |
+|---|---|
+| Image Upload | Almacena las imágenes de los productos |
+| Upload Preset | `zona-botin-products` (modo unsigned) |
+| Carpeta | `zona-botin/products/` |
+
+---
+
+### Mercado Pago
+> https://www.mercadopago.com.ar/developers
+
+| Servicio | Uso |
+|---|---|
+| Checkout Pro | Procesamiento de pagos |
+| Webhooks | Notificaciones automáticas de pagos aprobados/rechazados |
+| Back URLs | Redirección tras el pago (success / failure / pending) |
+
+---
+
+### Vercel
+> https://vercel.com
+
+| Servicio | Uso |
+|---|---|
+| Hosting | Deploy automático desde GitHub |
+| Environment Variables | Variables de entorno de producción |
+| Serverless Functions | API routes de Next.js (create-preference, webhook) |
+
+---
+
+## 📄 Páginas del Sitio
+
+### Públicas
+| Ruta | Descripción |
+|---|---|
+| `/` | Landing principal con hero, catálogo y filtros |
+| `/login` | Inicio de sesión |
+| `/register` | Registro en 2 pasos |
+| `/checkout/success` | Pago aprobado |
+| `/checkout/failure` | Pago rechazado |
+| `/checkout/pending` | Pago pendiente |
+
+### Privadas (requieren login)
+| Ruta | Descripción |
+|---|---|
+| `/cart` | Carrito y formulario de checkout |
+
+### Admin (solo cuenta admin)
+| Ruta | Descripción |
+|---|---|
+| `/admin` | Dashboard con estadísticas y pedidos recientes |
+| `/admin/products` | CRUD de productos con carga de imágenes |
+| `/admin/orders` | Gestión y seguimiento de pedidos |
+
+### API Routes (internas)
+| Ruta | Descripción |
+|---|---|
+| `/api/create-preference` | Crea la preferencia de pago en MercadoPago |
+| `/api/webhook` | Recibe notificaciones de pago de MercadoPago |
+
+---
+
+## 🔑 Variables de Entorno
+
+Archivo: `.env.local` (local) — Panel de Vercel (producción)
+
+```env
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+# Cloudinary
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=dryv3qbrh
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=zona-botin-products
+
+# Mercado Pago
+MP_ACCESS_TOKEN=
+
+# General
+NEXT_PUBLIC_BASE_URL=https://tu-dominio.vercel.app
+NEXT_PUBLIC_ADMIN_EMAIL=zonabotin@gmail.com
+```
+
+---
+
+## 👤 Cuenta Administrador
+
+- **Email:** zonabotin@gmail.com
+- **Cómo acceder:** iniciar sesión normalmente en `/login`
+- **Panel:** `/admin`
+- **Funciones:** cargar productos, ver pedidos, recibir notificaciones de ventas en tiempo real
+
+---
+
+## 🗂️ Estructura del Proyecto
+
+```
+zona-botin/
+├── src/
+│   ├── app/
+│   │   ├── page.js                  # Landing + catálogo
+│   │   ├── login/page.jsx           # Login
+│   │   ├── register/page.jsx        # Registro
+│   │   ├── cart/page.jsx            # Checkout
+│   │   ├── checkout/
+│   │   │   ├── success/page.jsx
+│   │   │   ├── failure/page.jsx
+│   │   │   └── pending/page.jsx
+│   │   ├── admin/
+│   │   │   ├── page.jsx             # Dashboard
+│   │   │   ├── products/page.jsx    # Gestión productos
+│   │   │   └── orders/page.jsx      # Gestión pedidos
+│   │   └── api/
+│   │       ├── create-preference/   # API MercadoPago
+│   │       └── webhook/             # Webhook MercadoPago
+│   ├── components/
+│   │   ├── Navbar.jsx               # Barra de navegación + notificaciones
+│   │   ├── CartDrawer.jsx           # Carrito lateral
+│   │   ├── ProductCard.jsx          # Tarjeta de producto
+│   │   └── ImageGallery.jsx         # Galería con lightbox
+│   ├── context/
+│   │   ├── AuthContext.jsx          # Estado de autenticación
+│   │   ├── CartContext.jsx          # Estado del carrito
+│   │   └── ToastContext.jsx         # Notificaciones emergentes
+│   └── lib/
+│       └── firebase.js              # Configuración Firebase
+├── .env.local                       # Variables de entorno (NO subir a Git)
+├── jsconfig.json                    # Alias de rutas (@/)
+├── tailwind.config.js
+├── next.config.mjs
+├── firestore.rules                  # Reglas de seguridad Firestore
+└── storage.rules                    # Reglas de seguridad Storage
+```
+
+---
+
+## 🚀 Correr en Local
+
+```bash
+npm install
+npm run dev
+```
+
+Abrir: http://localhost:3000
+
+---
+
+## ☁️ Deploy en Vercel
+
+1. Subir el proyecto a GitHub
+2. Conectar el repo en https://vercel.com
+3. Agregar todas las variables de entorno en **Settings → Environment Variables**
+4. Cambiar `NEXT_PUBLIC_BASE_URL` al dominio real de Vercel
+5. Configurar la URL del webhook en MercadoPago: `https://tu-dominio.vercel.app/api/webhook`
+
+---
+
+## 💳 Activar MercadoPago
+
+1. Ir a https://www.mercadopago.com.ar/developers
+2. Crear una aplicación
+3. Copiar el **Access Token** de producción
+4. Pegarlo en `MP_ACCESS_TOKEN` del .env.local y en Vercel
+5. Configurar el webhook en el panel de MP apuntando a `/api/webhook`
+
+---
+
+## 🔒 Seguridad
+
+- `.env.local` está en `.gitignore` — nunca se sube a GitHub
+- Las reglas de Firestore limitan el acceso por usuario autenticado
+- Solo el email admin puede escribir productos y leer todos los pedidos
+- Las imágenes se suben directamente a Cloudinary con preset unsigned
+
+---
+
+## 📦 Stack Tecnológico
+
+| Tecnología | Versión | Uso |
+|---|---|---|
+| Next.js | 14.2 | Framework principal |
+| React | 18 | UI |
+| Tailwind CSS | 3.4 | Estilos |
+| Firebase | 10.x | Auth + Base de datos |
+| Cloudinary | API REST | Almacenamiento de imágenes |
+| MercadoPago SDK | 2.x | Pagos |
+| Vercel | — | Hosting y deploy |
