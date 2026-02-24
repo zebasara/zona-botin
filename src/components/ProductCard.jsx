@@ -82,7 +82,7 @@ export default function ProductCard({ product }) {
           )}
           <p className="text-xs text-gray-400 mb-3">Stock: {product.cantidad || 0} unidades</p>
 
-          <div className="flex items-end justify-between mt-auto">
+          <div className="flex flex-col gap-2 mt-auto">
             <div>
               {product.precioOriginal > product.precio && (
                 <p className="text-xs text-gray-400 line-through">${product.precioOriginal?.toLocaleString('es-AR')}</p>
@@ -92,7 +92,7 @@ export default function ProductCard({ product }) {
             <button
               onClick={openModal}
               disabled={!disponible}
-              className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${
+              className={`w-full py-2 rounded-xl font-bold text-sm transition-all ${
                 disponible
                   ? 'bg-verde-500 hover:bg-verde-600 text-white shadow-md hover:shadow-lg active:scale-95'
                   : 'bg-gray-200 text-gray-400 cursor-not-allowed'
